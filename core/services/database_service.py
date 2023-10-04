@@ -8,13 +8,12 @@ from core.models import Wallet, User
 from core.utils.database_connetion import DatabaseConnection
 from core.services.ethereum_service import EthereumService
 
-logger = logging.getLogger("DatabaseService")
-
 
 class DatabaseService:
     def __init__(
         self, ethereum_service: EthereumService, db_connection: DatabaseConnection
     ) -> None:
+        self._logger = logging.getLogger(self.__class__.__name__)
         self._ethereum_service = ethereum_service
         self._db_connection = db_connection
 
@@ -29,7 +28,9 @@ class DatabaseService:
             logging.error(exc)
             return []
 
-    def _update_wallet_balance(self, user: User, wallet: Wallet, session: Session) -> None:
+    def _update_wallet_balance(
+        self, user: User, wallet: Wallet, session: Session
+    ) -> None:
         try:
             balance = self._ethereum_service.get_token_balance(
                 Web3.to_checksum_address(str(wallet.address))
@@ -38,12 +39,12 @@ class DatabaseService:
                 wallet.balance = balance
                 is_modified = session.is_modified(wallet)
                 if is_modified:
-                    logger.info(
+                    self._logger.info(
                         f'The balance of user "{user.username}" on wallet "{wallet.address}" has been updated'
                     )
                 session.commit()
         except Exception as exc:
-            logger.error(f"Failed to update balance for user {user.id}: {exc}")
+            self._logger.error(f"Failed to update balance for user {user.id}: {exc}")
 
     def update_user_wallet_balance(self) -> None:
         with self._db_connection as db_connection:

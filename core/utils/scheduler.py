@@ -4,8 +4,6 @@ import schedule
 from core.services.ethereum_service import EthereumService
 from core.services.database_service import DatabaseService
 
-logger = logging.getLogger("Scheduler")
-
 
 class Scheduler:
     def __init__(
@@ -18,6 +16,7 @@ class Scheduler:
             ethereum_service (EthereumService): Instance of EthereumService.
             database_service (DatabaseService): Instance of DatabaseService.
         """
+        self._logger = logging.getLogger(self.__class__.__name__)
         self._ethereum_service = ethereum_service
         self._database_service = database_service
 
@@ -31,14 +30,16 @@ class Scheduler:
         Args:
             minutes (int): Schedule minutes.
         """
-        logger.debug(f"The scheduler is up and running. Intervals: {minutes} minutes.")
-        
+        self._logger.debug(
+            f"The scheduler is up and running. Intervals: {minutes} minutes."
+        )
+
         self._job()
         schedule.every(minutes).minutes.do(self._job)
-        
+
         try:
             while True:
                 schedule.run_pending()
                 time.sleep(1)
         except KeyboardInterrupt:
-            logger.debug("Scheduler stopped by user.")
+            self._logger.debug("Scheduler stopped by user.")

@@ -1,12 +1,8 @@
-import logging
-
 from typing import Optional, Union
 
 from sqlalchemy import create_engine, Engine
 from sqlalchemy.engine import URL
 from sqlalchemy.orm import sessionmaker, Session
-
-logger = logging.getLogger("DatabaseConnection")
 
 
 class DatabaseConnection:

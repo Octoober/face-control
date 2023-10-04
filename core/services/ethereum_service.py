@@ -7,8 +7,6 @@ from typing import Dict, Union, Any
 from web3 import Web3
 from eth_typing import Address, ChecksumAddress
 
-logger = logging.getLogger("EthereumService")
-
 
 class EthereumService:
     def __init__(
@@ -17,6 +15,7 @@ class EthereumService:
         contract_address: Union[Address, ChecksumAddress],
         abi_filename: str = "contract_abi.json",
     ) -> None:
+        self._logger = logging.getLogger(self.__class__.__name__)
         self._contract_address = contract_address
         self._abi_filename = abi_filename
         self._abi_filepath = Path(self._abi_filename)
