@@ -6,6 +6,7 @@ from sqlalchemy.orm import sessionmaker, Session
 
 
 class DatabaseConnection:
+    # ! TODO: refactoring
     _instance: Optional["DatabaseConnection"] = None
     _engine: Engine
     _sessionmaker: sessionmaker

@@ -22,7 +22,7 @@ class Scheduler:
 
     def _job(self) -> None:
         """Perform the job of updating user wallet balance."""
-        self._database_service.update_user_wallet_balance()
+        self._database_service.update_wallet_balance()
 
     def run(self, minutes: int) -> None:
         """Run the scheduler and execute the job every 5 minutes.
